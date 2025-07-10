@@ -1,0 +1,30 @@
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      templates:
+      - condition:
+          contains:
+            docker.container.name: api
+        config:
+          - type: container
+            paths:
+              - /var/lib/docker/containers/${data.docker.container.id}/*.log
+
+filebeat.inputs:
+- type: journald
+  enabled: true
+  id: systemd-logs
+  seek: since
+  since: -24h
+- type: log
+  enabled: true
+  paths:
+     - /var/log/*.log
+
+setup.kibana:
+ host: ${KIBANA_HOSTS}
+setup.template.name: "filebeat-logs"
+setup.template.pattern: "filebeat-logs"
+
+output.logstash:
+  hosts: ["logstash:5044"]
