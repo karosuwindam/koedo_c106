@@ -94,9 +94,9 @@ services:
       - esnet
   filebeat:
     container_name: filebeat
-    #image: elastic/filebeat:8.18.2
-    hostname: "test-server"
-    build: filebeat/
+    image: elastic/filebeat:8.18.2
+    # hostname: "test-server"
+    # build: filebeat/
     user: root
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
@@ -104,7 +104,6 @@ services:
     command: ["filebeat", "-e", "--strict.perms=false"]
     volumes:
       - "./filebeat/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro"
-      # - "./filebeat/filebeat.docker.yml:/etc/filebeat/filebeat.yml:ro"
       - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/var/log:/var/log:ro"
